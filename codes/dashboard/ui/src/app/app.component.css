@@ -1,0 +1,39 @@
+.label-txt {
+    color: black !important;
+    font-size: 15px;
+    font-weight: 600;
+    padding-top: 10px;
+}
+
+.graph-head {
+    color: black !important;
+    font-size: 18px;
+    font-weight: 550;
+    padding-bottom: 5px;
+}
+
+.seq-head {
+    color: black !important;
+    font-size: 17px;
+    font-weight: 550;
+}
+
+.graph {
+    padding-top: 0px;
+    padding: 15px;
+}
+
+.btn {
+    background-color: white;
+}
+
+/* Green */
+.success {
+    border-color: #4CAF50;
+    color: green;
+}
+
+.success:hover {
+    background-color: #4CAF50;
+    color: white;
+}

@@ -1,0 +1,11 @@
+Threat Intelligence
+
+--- Bachelor's Thesis - B. Tech in Electronics Engineering
+--- Work done under COE-CNDS, VJTI
+--- Project Guide - Dr. Faruk Kazi
+--- Team - 1. Soham Deshmukh (151060022)
+	   2. Rahul Rade     (151060050)
+	   3. Ajay Unny      (151060062)
+	   4. Ruturaj Nene   (151060064)
+
+--- Link to Cowrie Honeypot Logs [https://drive.google.com/open?id=0B8wvhHyo3IjsbVF2bGhseDRRSVU]

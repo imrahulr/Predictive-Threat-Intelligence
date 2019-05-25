@@ -1,0 +1,211 @@
+<div class="container">
+    
+    <app-spinner *ngIf="isRequesting " delay="12 " message="Fetching Session"></app-spinner>
+
+    <div class="row">
+    <div class="col-md-12">
+      
+      <div class="page-header">
+        <h1><b>Threat Intelligence</b></h1>
+      </div>
+
+      <br>
+    
+      <div class="row graph">
+        <p class="graph-head">Most Common Attacking IPs</p>
+        <div style="display: block">
+          <canvas baseChart height="300vh" width="1vw"
+                  [datasets]="IPBarChartData" [labels]="IPBarChartLabels"
+                  [options]="IPBarChartOptions" [legend]="barChartLegend"
+                  [chartType]="IPBarChartType"  [colors]="IPChartColors">
+          </canvas>
+        </div>
+      </div>
+
+      <div class="row graph">
+        <div class="col-md-6">
+          <p class="graph-head">Common Usernames</p>
+          <div style="display: block" *ngIf="loaded">
+            <canvas baseChart height="300vh" width="1vw"
+                    [datasets]="UBarChartData" [labels]="UBarChartLabels"
+                    [options]="UBarChartOptions" [legend]="barChartLegend"
+                    [chartType]="UBarChartType"  [colors]="UChartColors">
+            </canvas>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <p class="graph-head">Common Passwords</p>
+          <div style="display: block" *ngIf="loaded">
+            <canvas baseChart height="300vh" width="1vw"
+                    [datasets]="PBarChartData" [labels]="PBarChartLabels"
+                    [options]="PBarChartOptions" [legend]="barChartLegend"
+                    [chartType]="PBarChartType"  [colors]="PChartColors">
+            </canvas>
+          </div>
+        </div>
+      </div>
+
+      <div class="row graph">
+        <div class="col-md-8">
+          <p class="graph-head">Top 5 Attacked Systems</p>
+          <div style="display: block" *ngIf="loaded">
+            <canvas baseChart height="300vh" width="1vw"
+                    [data]="SDoughnutChartData" [labels]="SDoughnutChartLabels"
+                    [chartType]="SDoughnutChartType" [colors]="SChartColors" [options]="SDChartOptions">
+            </canvas>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <p class="graph-head">Common Destination IPs</p>
+          <div style="display: block" *ngIf="loaded">
+            <canvas baseChart height="300vh" width="1vw"
+                    [datasets]="DBarChartData" [labels]="DBarChartLabels"
+                    [options]="DBarChartOptions" [legend]="barChartLegend"
+                    [chartType]="DBarChartType"  [colors]="DChartColors">
+            </canvas>
+          </div>
+        </div>
+      </div>
+
+      <hr>
+
+      <div class="row graph">
+        <p class="graph-head">Predict Attacker Steps</p>
+        <div class="col-md-6">
+          <div class="row">
+            <div class="col-md-4 label-txt">
+                <label for="Session ID">Session ID</label>
+            </div>
+            <div class="col-md-5">
+              <div class="form-group">
+                <input type="text" class="form-control" id="sessId" required [(ngModel)]="sessionId" name="sessId" #sessId="ngModel">
+                <div [hidden]="sessId.valid || sessId.pristine" class="alert alert-danger">
+                    Session ID is required
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-2">
+              <div class="form-group">
+                <select class="form-control" required [(ngModel)]="sessionId">
+                  <option value="936c304a8e04">936c304a8e04</option>
+                  <option value="6d87b3823e8d">6d87b3823e8d</option>
+                  <option value="532b7cefb53a">532b7cefb53a</option>
+                  <option value="abcfc740e58f">abcfc740e58f</option>
+                  <option value="009857db30e8">009857db30e8</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="col-md-6">
+            <button type="button" (click)="getSession()" class="btn success">Get Session</button>
+        </div>
+      </div>
+      
+
+      <ng-container *ngIf="trueSeq.length != 0">
+        <hr>
+        <p class="seq-head">Attack Sequence - Markov Chain</p>
+        
+        <div style="display:inline-block;width:100%;overflow-y:auto;">
+        
+        <ul class="timeline timeline-horizontal">
+        
+          <ng-container *ngFor="let s of trueSeq; let i=index">
+            
+            <li class="timeline-item">
+              <ng-container *ngIf="s == states[mc[i]]">
+                <div class="timeline-badge success"><i class="glyphicon glyphicon-check"></i></div>
+              </ng-container>
+              <ng-container *ngIf="s != states[mc[i]]">  
+                <div class="timeline-badge danger"><i class="glyphicon glyphicon-check"></i></div>
+              </ng-container>
+
+              <div class="timeline-panel">
+                <div class="timeline-heading">
+                  <h4 class="timeline-title">{{ s }}</h4>
+                  <p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>24 Jan 2019</small></p>
+                </div>
+                <div class="timeline-body">
+                  <p>Predicted: {{ states[mc[i]] }}</p>
+                </div>
+              </div>
+            </li>
+          
+            </ng-container>
+        </ul>
+        </div>
+        
+        <hr>
+        <p class="seq-head">Attack Sequence - HMM</p>
+        
+        <div style="display:inline-block;width:100%;overflow-y:auto;">
+        
+          <ul class="timeline timeline-horizontal">
+          
+            <ng-container *ngFor="let s of trueSeq; let i=index">
+              
+              <li class="timeline-item">
+                <ng-container *ngIf="s == states[hmm[i]]">
+                  <div class="timeline-badge success"><i class="glyphicon glyphicon-check"></i></div>
+                </ng-container>
+                <ng-container *ngIf="s != states[hmm[i]]">  
+                  <div class="timeline-badge danger"><i class="glyphicon glyphicon-check"></i></div>
+                </ng-container>
+  
+                <div class="timeline-panel">
+                  <div class="timeline-heading">
+                    <h4 class="timeline-title">{{ s }}</h4>
+                    <p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>24 Jan 2019</small></p>
+                  </div>
+                  <div class="timeline-body">
+                    <p>Predicted: {{ states[hmm[i]] }}</p>
+                  </div>
+                </div>
+              </li>
+            
+            </ng-container>
+        </ul>
+        </div>
+        
+        <hr>
+        <p class="seq-head">Attack Sequence - LSTM</p>
+        
+        <div style="display:inline-block;width:100%;overflow-y:auto;">
+        
+          <ul class="timeline timeline-horizontal">
+          
+            <ng-container *ngFor="let s of trueSeq; let i=index">
+              
+              <li class="timeline-item">
+                <ng-container *ngIf="s == states[lstm[i]-1]">
+                  <div class="timeline-badge success"><i class="glyphicon glyphicon-check"></i></div>
+                </ng-container>
+                <ng-container *ngIf="s != states[lstm[i]-1]">  
+                  <div class="timeline-badge danger"><i class="glyphicon glyphicon-check"></i></div>
+                </ng-container>
+  
+                <div class="timeline-panel">
+                  <div class="timeline-heading">
+                    <h4 class="timeline-title">{{ s }}</h4>
+                    <p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>24 Jan 2019</small></p>
+                  </div>
+                  <div class="timeline-body">
+                    <p>Predicted: {{ states[lstm[i]-1] }}</p>
+                  </div>
+                </div>
+              </li>
+            
+          </ng-container>
+        </ul>
+        </div>
+
+      </ng-container>
+
+    </div>
+  </div>
+</div>
+

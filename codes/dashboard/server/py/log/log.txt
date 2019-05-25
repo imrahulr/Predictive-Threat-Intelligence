@@ -1,0 +1,1 @@
+ Start  Sequence Session.txt  Seq found  Loaded Markov Chain  Loaded HMM  Initialized variables  Completed predictions.. printing  Output Done!!! 
