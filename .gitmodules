@@ -1,0 +1,3 @@
+[submodule "codes/kafka/log-processing"]
+	path = codes/kafka/log-processing
+	url = /home/rahul/rahul/Documents/Honeypot/Predictive-Threat-Intelligence
